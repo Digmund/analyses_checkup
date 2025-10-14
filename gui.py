@@ -9,7 +9,7 @@ class AnalyzerApp(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.title("Проверка анализов")
-        self.geometry("600x800")
+        self.geometry("550x800")
         self.analyses, self.reasons = get_analysis_data()
         self.create_widgets()
 
@@ -94,40 +94,53 @@ class AllAnalyses(ctk.CTkToplevel):
             self.lift()
             self.focus_force()
 
+            main_frame = ctk.CTkFrame(self)
+            main_frame.pack(fill="both", expand=True, padx=10, pady=10)
+
             headers = ["ID", "Название", "Мин", "Макс", "Причины пониженных значений", "Причины повышенных значений"]
             for col, header in enumerate(headers):
-                ctk.CTkLabel(self, text=header, font=("Arial", 14, "bold")).grid(row=0, column=col, padx=10, pady=10)
+                ctk.CTkLabel(main_frame, text=header, font=("Arial", 14, "bold")).grid(row=0, column=col, padx=10, pady=10)
+
+            table_frame = ctk.CTkScrollableFrame(main_frame, height=300)
+            table_frame.grid(row=1, column=0, columnspan=6, sticky="nsew", pady=10)
 
             for i, analysis in enumerate(self.analyses, start=1):
                 id, name, min_val, max_val, low_reasons, high_reasons = analysis
-                ctk.CTkLabel(self, text=str(id)).grid(row=i, column=0, padx=10, pady=5)
-                ctk.CTkLabel(self, text=name).grid(row=i, column=1, padx=10, pady=5)
-                ctk.CTkLabel(self, text=str(min_val)).grid(row=i, column=2, padx=10, pady=5)
-                ctk.CTkLabel(self, text=str(max_val)).grid(row=i, column=3, padx=10, pady=5)
-                ctk.CTkLabel(self, text=str(low_reasons)).grid(row=i, column=4, padx=10, pady=5)
-                ctk.CTkLabel(self, text=str(high_reasons)).grid(row=i, column=5, padx=10, pady=5)
+                ctk.CTkLabel(table_frame, text=str(id)).grid(row=i, column=0, padx=10, pady=5)
+                ctk.CTkLabel(table_frame, text=name).grid(row=i, column=1, padx=10, pady=5)
+                ctk.CTkLabel(table_frame, text=str(min_val)).grid(row=i, column=2, padx=10, pady=5)
+                ctk.CTkLabel(table_frame, text=str(max_val)).grid(row=i, column=3, padx=10, pady=5)
+                ctk.CTkLabel(table_frame, text=str(low_reasons)).grid(row=i, column=4, padx=10, pady=5)
+                ctk.CTkLabel(table_frame, text=str(high_reasons)).grid(row=i, column=5, padx=10, pady=5)
 
-            self.button = ctk.CTkButton(self, text="Добавить анализ", command=self.open_add_analysis)
-            self.button.grid(row=len(self.analyses)+1, column=0, columnspan=2, pady=20)
+            input_frame = ctk.CTkFrame(main_frame)
+            input_frame.grid(row=2, column=0, columnspan=6, sticky="ew", pady=10)
 
-        def open_add_analysis(self):
-            window = AddAnalysis(self)
-            window.attributes('-topmost', True)
+            self.name_entry = ctk.CTkEntry(input_frame, placeholder_text='Название', width=300)
+            self.name_entry.grid(row=0, column=1, padx=10, pady=5)
+            self.min_value_entry = ctk.CTkEntry(input_frame, placeholder_text='Мин', width=50)
+            self.min_value_entry.grid(row=0, column=2, padx=10, pady=5)
+            self.max_value_entry = ctk.CTkEntry(input_frame, placeholder_text='Макс', width=50)
+            self.max_value_entry.grid(row=0, column=3, padx=10, pady=5)
 
-# Класс для кнопки "Добавить анализ"
-class AddAnalysis(ctk.CTkToplevel):
-        def __init__(self, parent):
-            super().__init__(parent)
-            self.setup_window()
+            self.selected_low_reasons = []
+            self.selected_high_reasons = []
 
-        def setup_window(self):
-            self.title("Добавить анализ")
-            self.geometry("1000x100")
-            self.lift()
-            self.focus_force()
-            headers = ["ID", "Название", "Мин", "Макс", "Причины пониженных значений", "Причины повышенных значений"]
-            for col, header in enumerate(headers):
-                ctk.CTkLabel(self, text=header, font=("Arial", 14, "bold")).grid(row=0, column=col, padx=10, pady=10)
+            self.low_reasons_btn = ctk.CTkButton(input_frame, text="Список пониженных причин", width=30, command=self.add_low_reasons_btn)
+            self.low_reasons_btn.grid(row=0, column=4, padx=10, pady=5)
+            self.high_reasons_btn = ctk.CTkButton(input_frame, text="Список повышенных причин", width=30, command=self.add_high_reasons_btn)
+            self.high_reasons_btn.grid(row=0, column=5, padx=10, pady=5)
+            self.add_button = ctk.CTkButton(input_frame, text="Добавить анализ")
+            self.add_button.grid(row=1, column=0, columnspan=6, pady=10)
+
+            main_frame.grid_rowconfigure(1, weight=1)
+            main_frame.grid_columnconfigure(0, weight=1)
+
+        def add_low_reasons_btn(self):
+            ReasonSelectorWindow(self, reason_type="low")
+
+        def add_high_reasons_btn(self):
+            ReasonSelectorWindow(self, reason_type="high")
 
 # Класс для кнопки "Все причины"
 class AllReasons(ctk.CTkToplevel):
@@ -141,40 +154,60 @@ class AllReasons(ctk.CTkToplevel):
             self.geometry("600x800")
             self.lift()
             self.focus_force()
+            self.search_frame = ctk.CTkFrame(self)
+            self.search_frame.grid(row=0, column=0, sticky="ew", padx=10, pady=10)
+            self.search_entry = ctk.CTkEntry(
+                self.search_frame,
+                placeholder_text="Поиск причины...",
+                width=400
+            )
+            self.search_entry.grid(row=0, column=0, padx=10, pady=5)
+            self.search_entry.bind("<KeyRelease>", self.search_reasons)  # Поиск при вводе
+
+            self.add_button = ctk.CTkButton(
+                self.search_frame,
+                text="Добавить причину",
+                command=self.add_current_reason,
+                width=150
+            )
+            self.add_button.grid(row=0, column=1, padx=10, pady=5)
             self.scrollable_frame = ctk.CTkScrollableFrame(self)
-            self.scrollable_frame.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
-            self.grid_rowconfigure(0, weight=1)
+            self.scrollable_frame.grid(row=1, column=0, sticky="nsew", padx=10, pady=10)
+            self.grid_rowconfigure(1, weight=1)
             self.grid_columnconfigure(0, weight=1)
-            sorted_reasons = sorted(self.reasons.items(), key=lambda x: x[1])
-            for i, (reason_id, description) in enumerate(sorted_reasons, start=1):
-                label = ctk.CTkLabel(self.scrollable_frame, text=f"{i}. {description}")
+            self.show_all_reasons()
+
+        def search_reasons(self, event=None):
+            search_text = self.search_entry.get().lower().strip()
+            if search_text:
+                self.filter_reasons(search_text)
+            else:
+                self.show_all_reasons()
+
+        def filter_reasons(self, search_text):
+            for widget in self.scrollable_frame.winfo_children():
+                widget.destroy()
+            filtered_reasons = [(id, desc) for id, desc in self.reasons.items() if search_text in desc.lower()]
+            for i, (id, description) in enumerate(filtered_reasons):
+                label = ctk.CTkLabel(self.scrollable_frame, text=description)
                 label.grid(row=i, column=0, padx=10, pady=5, sticky="w")
-            self.button = ctk.CTkButton(self, text="Добавить причину", command=self.add_reason)
-            self.button.grid(row=len(self.reasons)+1, column=0, columnspan=2, pady=20)
 
-        def add_reason(self):
-            window = AddReason(self)
-            window.attributes('-topmost', True)
+        def show_all_reasons(self):
+            for widget in self.scrollable_frame.winfo_children():
+                widget.destroy()
+            sorted_reasons = sorted(self.reasons.items(), key=lambda x: x[1])
+            for i, (id, description) in enumerate(sorted_reasons):
+                label = ctk.CTkLabel(self.scrollable_frame, text=f"{i+1}. {description}")
+                label.grid(row=i, column=0, padx=10, pady=5, sticky="w")
 
-class AddReason(ctk.CTkToplevel):
-    def __init__(self, parent):
-            super().__init__(parent)
-            self.parent = parent
-            self.setup_window()
+        def add_current_reason(self):
+            description = self.search_entry.get().strip()
+            if description:
+                add_reason(description)
+                self.search_entry.delete(0, "end")
+                _, self.reasons = get_analysis_data()
+                self.show_all_reasons()
 
-    def setup_window(self):
-        self.title("Добавить причину")
-        self.geometry("500x100")
-        self.entry = ctk.CTkEntry(self, placeholder_text="Введите причину", width=300)
-        self.entry.grid(row=1, column=1, padx=10, pady=5)
-        self.button = ctk.CTkButton(self, text="Добавить", command=self.add_reason_to_db)
-        self.button.grid(row=1, column=2, pady=20)
-
-    def add_reason_to_db(self):
-        description = self.entry.get().strip()
-        if description:
-            add_reason(description)
-            self.destroy()
 
 
 
