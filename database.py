@@ -24,7 +24,7 @@ def add_analysis(db_path='analyze.db'):
     cur = conn.cursor()
 
     cur.execute('''INSERT OR IGNORE INTO analysis (analysis_name, min_value, max_value, low_value_reasons, high_value_reasons)
-                VALUES (?, ?, ?, ?, ?)''', (name, min_val, max_val, low_reasons, high_reasons))
+                VALUES (?, ?, ?, ?, ?)''', (name, min_val, max_val, low_reasons_str, high_reasons_str))
 
     conn.commit()
     conn.close()
