@@ -19,7 +19,7 @@ def parse_reasons(reasons_string):
         return []
     return[int(id_str) for id_str in reasons_string.split()]
 
-def add_analysis(db_path='analyze.db'):
+def add_analysis(name, min_val, max_val, low_reasons_str, high_reasons_str, db_path='analyze.db'):
     conn = sqlite3.connect(db_path)
     cur = conn.cursor()
 

@@ -261,28 +261,27 @@ class ReasonSelectorWindow(ctk.CTkToplevel):
     def search_reasons(self, event=None):
         search_text = self.search_entry.get().lower().strip()
         for widget in self.scroll_frame.winfo_children():
-                widget.destroy()
+            widget.destroy()
         _, reasons = get_analysis_data()
 
         filtered_reasons = [(id, desc) for id, desc in reasons.items()
-                            if search_text in desc.lower()]
-
-            # Если поиск пустой, показываем все причины
+                        if search_text in desc.lower()]
         if not search_text:
             filtered_reasons = list(reasons.items())
-
-            # Показываем отфильтрованные причины
         self.checkboxes = {}
         sorted_reasons = sorted(filtered_reasons, key=lambda x: x[1])
 
         for i, (reason_id, description) in enumerate(sorted_reasons):
             var = ctk.BooleanVar()
+            if reason_id in self.selected_reasons:
+                var.set(True)
+
             checkbox = ctk.CTkCheckBox(
-                    self.scroll_frame,
-                    text=description,
-                    variable=var,
-                    command=lambda rid=reason_id, v=var: self.toggle_reason(rid, v)
-                )
+                self.scroll_frame,
+                text=description,
+                variable=var,
+                command=lambda rid=reason_id, v=var: self.toggle_reason(rid, v)
+            )
             checkbox.grid(row=i, column=0, sticky="w", padx=10, pady=2)
             self.checkboxes[reason_id] = var
 
