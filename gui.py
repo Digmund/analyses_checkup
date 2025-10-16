@@ -115,15 +115,12 @@ class AllAnalyses(ctk.CTkToplevel):
         # Главный фрейм
         main_frame = ctk.CTkFrame(self)
         main_frame.pack(fill="both", expand=True, padx=10, pady=10)
-        for col in range(6):
-            main_frame.grid_columnconfigure(col, weight=1)
-        # Заголовки
-        headers = ["ID", "Название", "Мин", "Макс", "Причины пониженных значений", "Причины повышенных значений"]
-        for col, header in enumerate(headers):
-            ctk.CTkLabel(main_frame, text=header, font=("Arial", 14, "bold")).grid(row=0, column=col, padx=5, pady=10, sticky="ew")
-       # Фрейм таблицы
+        # Фрейм таблицы
         self.table_frame = ctk.CTkScrollableFrame(main_frame, height=300)
         self.table_frame.grid(row=1, column=0, columnspan=6, sticky="nsew", pady=10)
+        headers = ["ID", "Название", "Мин", "Макс", "Причины пониженных значений", "Причины повышенных значений"]
+        for col, header in enumerate(headers):
+            ctk.CTkLabel(self.table_frame, text=header, font=("Arial", 14, "bold")).grid(row=0, column=col, padx=5, pady=10, sticky="ew")
         self.fill_table(self.table_frame)
         for col in range(6):
             self.table_frame.grid_columnconfigure(col, weight=1)
@@ -153,15 +150,16 @@ class AllAnalyses(ctk.CTkToplevel):
     # Заполнение таблицы
     def fill_table(self, table_frame):
         for widget in table_frame.winfo_children():
-            widget.destroy()
+            if int(widget.grid_info()["row"]) > 0:
+                widget.destroy()
         for i, analysis in enumerate(self.analyses, start=1):
             id, name, min_val, max_val, low_reasons, high_reasons = analysis
-            ctk.CTkLabel(table_frame, text=str(id)).grid(row=i, column=0, padx=5, pady=5, sticky="ew")
-            ctk.CTkLabel(table_frame, text=name).grid(row=i, column=1, padx=5, pady=5, sticky="ew")
-            ctk.CTkLabel(table_frame, text=str(min_val)).grid(row=i, column=2, padx=5, pady=5, sticky="ew")
-            ctk.CTkLabel(table_frame, text=str(max_val)).grid(row=i, column=3, padx=5, pady=5, sticky="ew")
-            ctk.CTkLabel(table_frame, text=str(low_reasons)).grid(row=i, column=4, padx=5, pady=5, sticky="ew")
-            ctk.CTkLabel(table_frame, text=str(high_reasons)).grid(row=i, column=5, padx=10, pady=5, sticky="ew")
+            ctk.CTkLabel(table_frame, text=str(id)).grid(row=i+1, column=0, padx=5, pady=5, sticky="ew")
+            ctk.CTkLabel(table_frame, text=name).grid(row=i+1, column=1, padx=5, pady=5, sticky="ew")
+            ctk.CTkLabel(table_frame, text=str(min_val)).grid(row=i+1, column=2, padx=5, pady=5, sticky="ew")
+            ctk.CTkLabel(table_frame, text=str(max_val)).grid(row=i+1, column=3, padx=5, pady=5, sticky="ew")
+            ctk.CTkLabel(table_frame, text=str(low_reasons)).grid(row=i+1, column=4, padx=5, pady=5, sticky="ew")
+            ctk.CTkLabel(table_frame, text=str(high_reasons)).grid(row=i+1, column=5, padx=10, pady=5, sticky="ew")
     # Обновления текста на кнопках с причинами
     def update_buttons_text(self):
         if self.selected_low_reasons:
