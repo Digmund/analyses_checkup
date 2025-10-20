@@ -6,6 +6,16 @@ analyses, reasons = get_analysis_data()
 
 # Функция для сравнения анализов с минимумом и максимумом
 def analyze_single_value(user_inputs, analyses):
+    """
+    Сверяет значение введенных данных и анализов
+
+        Args:
+            user_inputs: введенные пользователем данные
+            analyses: список кортежей с анализами из базы данных
+
+        Returns:
+            sorted_result: подсчитанный и отсортированный список причин, от большей к меньшей
+    """
     results = []
     for analysis in analyses:
         id, name, min_value, max_value, low_value_reasons, high_value_reasons = analysis

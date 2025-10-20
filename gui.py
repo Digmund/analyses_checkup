@@ -361,7 +361,6 @@ class AllReasons(ctk.CTkToplevel):
             _, self.reasons = get_analysis_data()
             self.show_all_reasons()
 
-
 # Запуск программы
 if __name__ == "__main__":
     app = AnalyzerApp()
