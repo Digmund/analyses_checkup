@@ -22,27 +22,32 @@ Desktop-приложение для анализа медицинских ана
 ## Установка и запуск
 
 ### 1. Клонирование репозитория
-
+```bash
 git clone https://github.com/Digmund/analyses_checkup.git
 cd analyses_checkup
+```
 
 ### 2. Установка зависимостей
-
+```bash
 pip install -r requirements.txt
+```
 
 ### 3. Запуск приложения
-
+```bash
 python gui.py
+```
 
 ## Сборка исполняемого файла
 Для создания standalone версии:
 
+```bash
 pip install pyinstaller
 pyinstaller --onefile --windowed gui.py
+```
 Исполняемый файл будет создан в папке dist/
 
 ## Архитектура проекта
-
+```markdown
 medical-analyzer/
 ├── gui.py              # Графический интерфейс
 ├── main.py             # Бизнес-логика анализа
@@ -50,7 +55,7 @@ medical-analyzer/
 ├── analyze.db          # База данных (создается автоматически)
 ├── requirements.txt    # Зависимости
 └── README.md          # Документация
-
+```
 ## Использование
 Основной workflow:
 Запустите приложение - откроется главное окно с таблицей анализов
@@ -100,4 +105,4 @@ id - ID причины
 description - описание причины
 
 ## Автор
-Dmitry - [\[ссылка на GitHub\]](https://github.com/Digmund)
+Dmitry - [\[GitHub\]](https://github.com/Digmund)
