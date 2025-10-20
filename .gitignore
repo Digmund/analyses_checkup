@@ -1,0 +1,59 @@
+# Временные файлы Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Файлы БД
+*.db
+*.sqlite3
+
+# Виртуальные окружения
+venv/
+env/
+.venv/
+
+# Настройки IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Файлы ОС
+.DS_Store
+Thumbs.db
+
+# Логи
+*.log
+
+# Файлы с чувствительными данными
+.env
+*.key
+*.pem
+
+# Исполняемые файлы и билды
+*.exe
+*.exec
+dist/
+build/
+*.spec
+
+# Для PyInstaller
+__pycache__/
+*.pyc
+*.pyd
+*.pyo
+*.egg-info/
+*.egg
+*.manifest
+*.dll
+*.so
+
+# Папки сборки
+build/
+dist/
+*.spec
+
+# Временные файлы сборки
+_temp/
+temp/
