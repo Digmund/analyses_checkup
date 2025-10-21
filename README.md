@@ -4,7 +4,7 @@
 
 **НЕ ИСПОЛЬЗУЙТЕ** для постановки диагнозов или замены консультации с врачом.
 
-Desktop-приложение для анализа медицинских анализов и выявления отклонений от нормы.
+## Desktop-приложение для анализа медицинских анализов и выявления отклонений от нормы.
 
 ![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)
 ![CustomTkinter](https://img.shields.io/badge/GUI-CustomTkinter-green.svg)
